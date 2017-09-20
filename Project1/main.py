@@ -4,7 +4,6 @@ import sys
 from city import City
 from argparse import ArgumentParser      
 
-#test comment
 #*********************************************************************
 # Used in the lambda function for parser
 #  Checks to see if the file is valid
@@ -12,31 +11,9 @@ from argparse import ArgumentParser
 #*********************************************************************
 def is_valid_file(parser, file):
     if os.path.exists(file):
-        return open(file)
+        return
     else:
         parser.error("The file %s does not exist." % file)
-
-def getCities(loc, con):
-    cities = []
-
-    locations = loc.readlines()
-    for line in locations:
-        if line == "END":
-            break
-
-        line.split()
-        c = City(line[0], line[1], line[2])
-        cities.append(c)
-
-    connections = con.readlines()
-    for line in connections:
-        if line == "END":
-            break
-        
-        line.split()
-        
-
-    return cities
 
 #*******************************************************************************************************************************************************
 # Uses ArgumentParser to get the command line arguments
@@ -55,6 +32,32 @@ parser.add_argument('--option', dest = 'option', help = 'Specify how to show ste
 args = parser.parse_args()
 #******************************************************************************************************************************************************
 
+with open(args.connections) as con_f:
+    con = con_f.readlines()
+
+with
+
+def getCities(locations, connections):
+    cities = []
+
+    for line in locations:
+        if line == "END":
+            break
+
+        line.split()
+        c = City(line[0], line[1], line[2])
+        cities.append(c)
+
+    for line in connections:
+        if line == "END":
+            break
+        
+        line.split()
+        #for c in cities:
+        #    if line[0] == c.name:
+                
+    return cities
+
 if __name__ == '__main__':
     loc_start = args.start
     loc_end = args.end
@@ -62,11 +65,6 @@ if __name__ == '__main__':
     heuristic = args.heuristic
     option = args.option
     
-    cityList = getCities(args.locations, args.connections)
-    
-
-
-
-    
-        
-        
+    loc = args.locations.readlines()
+    con = args.connections.readlines()
+    cityList = getCities(loc, con)        
