@@ -4,6 +4,7 @@ import sys
 from city import City
 from argparse import ArgumentParser      
 
+#test comment
 #*********************************************************************
 # Used in the lambda function for parser
 #  Checks to see if the file is valid
