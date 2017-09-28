@@ -1,19 +1,10 @@
 #!/usr/bin/python
 import os
 import sys
+import functions
+
 from city import City
 from argparse import ArgumentParser      
-
-#*********************************************************************
-# Used in the lambda function for parser
-#  Checks to see if the file is valid
-#  Opens the file if valid, throws error if invalid
-#*********************************************************************
-def is_valid_file(parser, file):
-    if os.path.exists(file):
-        return
-    else:
-        parser.error("The file %s does not exist." % file)
 
 #*******************************************************************************************************************************************************
 # Uses ArgumentParser to get the command line arguments
@@ -37,27 +28,6 @@ with open(args.connections) as con_f:
 
 with
 
-def getCities(locations, connections):
-    cities = []
-
-    for line in locations:
-        if line == "END":
-            break
-
-        line.split()
-        c = City(line[0], line[1], line[2])
-        cities.append(c)
-
-    for line in connections:
-        if line == "END":
-            break
-        
-        line.split()
-        #for c in cities:
-        #    if line[0] == c.name:
-                
-    return cities
-
 if __name__ == '__main__':
     loc_start = args.start
     loc_end = args.end
@@ -67,4 +37,7 @@ if __name__ == '__main__':
     
     loc = args.locations.readlines()
     con = args.connections.readlines()
-    cityList = getCities(loc, con)        
+    cityMap = getCities(loc, con)        
+
+    if args.heuristic == 0:
+        Staight_Line(loc_start, loc_end)
