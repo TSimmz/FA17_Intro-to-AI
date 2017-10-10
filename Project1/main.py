@@ -21,12 +21,8 @@ parser.add_argument('-H', dest = 'heuristic', help = 'Specify the heuristic to u
 parser.add_argument('--option', dest = 'option', help = 'Specify how to show steps: 0 - Full optimal path (Default), 1 - Step-by-step (Enter key)',
     nargs = '?', const = 0, type = int,default = 0)
 args = parser.parse_args()
-#******************************************************************************************************************************************************
+#*******************************************************************************************************************************************************
 
-with open(args.connections) as con_f:
-    con = con_f.readlines()
-
-with
 
 if __name__ == '__main__':
     loc_start = args.start
@@ -34,10 +30,17 @@ if __name__ == '__main__':
     exclude = args.exclude
     heuristic = args.heuristic
     option = args.option
-    
-    loc = args.locations.readlines()
-    con = args.connections.readlines()
-    cityMap = getCities(loc, con)        
 
-    if args.heuristic == 0:
-        Staight_Line(loc_start, loc_end)
+    with open(args.locations) as loc_f:
+        loc = loc_f.readlines()
+        loc_f.close()
+
+    with open(args.connections) as con_f:
+        con = con_f.readlines()
+        con_f.close()
+
+    cityMap = getCities(loc, con)        
+    print 'Cities obtained'
+    
+    #if args.heuristic == 0:
+    #    Staight_Line(loc_start, loc_end)
