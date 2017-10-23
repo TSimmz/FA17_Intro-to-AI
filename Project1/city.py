@@ -1,4 +1,5 @@
 import math
+
 #*****************************************************
 # City class to hold the coordinates of the city, the
 #   connections, and the distance btwn connections
@@ -11,6 +12,8 @@ class City():
         self.name = name
         self.x = x
         self.y = y
+        self.start = False
+        self.end = False
         self.connections = []
         self.connDist = []
         City.cityCount += 1
@@ -20,6 +23,12 @@ class City():
         class_name = self.__class__.__name__
         #print class_name, "destroyed."
 
+    def setStart(self):
+        self.start = True
+    
+    def setEnd(self):
+        self.end = True
+        
     def addConnection(self, conn):
         self.connections.append(conn)
 

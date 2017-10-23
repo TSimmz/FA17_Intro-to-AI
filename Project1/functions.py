@@ -56,24 +56,34 @@ def getCities(locations, connections):
     return cities
 
 #*********************************************************************
+# Removed cities if excluded cities parameter was entered
+#*********************************************************************
+def RemoveCities(cityMap, ex):
+    for e in ex:
+        for c in cityMap:
+            if e == c.name:
+                cityMap.remove(c)
+                print c.name, "removed."
+
+#*********************************************************************
 # Performs a basic heuristic score from start to finish
 #*********************************************************************
-# def Estimate_Score(start, end):
-#     return None
+def Estimate_Score(start, end):
+    return None
 
 #*********************************************************************
 # Function to perform the straight-line heuristic
 #*********************************************************************
-# def Straight_Line(start, end, cityMap):
-#     vestibule = [start]
-#     processed = []
-#     prevPath = dict()
+def Straight_Line(start, end, cityMap):
+    vestibule = [start]
+    processed = []
+    prevPath = dict()
     
-#     sScore = dict()
-#     sScore[start] = 0
+    sScore = dict()
+    sScore[start] = 0
     
-#     eScore = dict()
-#     eScore[start] = Estimate_Score(start, end)
+    eScore = dict()
+    eScore[start] = Estimate_Score(start, end)
 
 #     while vestibule:
 #         temp = sScore.values
@@ -104,6 +114,11 @@ def getCities(locations, connections):
 #*********************************************************************
 # Returns the final path to the problem
 #*********************************************************************
-# def FinalPath(prevPath, current):
-#     return None
-    
+def FinalPath(prevPath, current):
+    return None
+
+#*********************************************************************
+# Function to perform the fewest links heuristic
+#*********************************************************************
+def Fewest_Links(start, end, cityMap):
+    return None    
