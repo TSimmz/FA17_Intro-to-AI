@@ -14,6 +14,7 @@ class City():
         self.y = y
         self.start = False
         self.end = False
+        self.cost = float("inf")
         self.connections = []
         self.connDist = []
         City.cityCount += 1
@@ -23,12 +24,21 @@ class City():
         class_name = self.__class__.__name__
         #print class_name, "destroyed."
 
+    def __repr__(self):
+        return str(self)
+        
+    def __str__(self):
+        return self.name
+
     def setStart(self):
         self.start = True
     
     def setEnd(self):
         self.end = True
-        
+
+    def setCost(self, f):
+        self.cost = f
+
     def addConnection(self, conn):
         self.connections.append(conn)
 

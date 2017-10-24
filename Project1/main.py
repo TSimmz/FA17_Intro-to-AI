@@ -24,9 +24,11 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
 
+    # Get the data from the open files
     loc_f = args.locations.readlines()
     con_f = args.connections.readlines()
 
+    # Close the open files
     args.locations.close()
     args.connections.close()
 
@@ -43,12 +45,12 @@ if __name__ == '__main__':
         if city.name == args.start:
             city.setStart()
             start = city
-            print city.name, "set as Start\n"
+            print city.name, "set as Start.\n"
         
         if city.name == args.end:
             city.setEnd()
             end = city
-            print city.name, "set as End\n"
+            print city.name, "set as End.\n"
 
     #*********************************************************************
     # Remove cities if excluded
@@ -56,12 +58,22 @@ if __name__ == '__main__':
     if args.exclude != None:
         func.RemoveCities(cityMap, args.exclude)
     else:
-        print 'No cities to exclude\n'
+        print 'No cities to exclude.\n'
 
     #*********************************************************************
-    # If heuristic is straight line
+    # Full path or step-by-step
+    #*********************************************************************
+    if args.option == 0:
+        print 'Printing full path.\n'
+    else:
+        print 'Printing step-by-step. Press enter to move.\n'
+
+    #*********************************************************************
+    # Heuristic choice from command line argument
     #*********************************************************************
     if args.heuristic == 0:
-        func.Straight_Line(start, end, cityMap)
+        print 'Using Straight-Line heuristic.\n\n'
+        func.Straight_Line2(start, end, cityMap, args.option)
     else:
-        func.Fewest_Links(start, end, cityMap)
+        print 'Using Fewest-Links heuristic.\n\n'
+        func.Fewest_Links(start, end, cityMap, args.option)
