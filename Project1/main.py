@@ -36,21 +36,7 @@ if __name__ == '__main__':
     # Get the map of the cities
     #*********************************************************************
     cityMap = func.getCities(loc_f, con_f)
-    print '\nCities obtained\n'
-
-    #*********************************************************************
-    # Set start and end cities
-    #*********************************************************************
-    for city in cityMap:
-        if city.name == args.start:
-            city.setStart()
-            start = city
-            print city.name, "set as Start.\n"
-        
-        if city.name == args.end:
-            city.setEnd()
-            end = city
-            print city.name, "set as End.\n"
+    print '\nCities obtained'
 
     #*********************************************************************
     # Remove cities if excluded
@@ -58,22 +44,49 @@ if __name__ == '__main__':
     if args.exclude != None:
         func.RemoveCities(cityMap, args.exclude)
     else:
-        print 'No cities to exclude.\n'
+        print 'No cities to exclude.'
+
+    #*********************************************************************
+    # Set start and end cities
+    #*********************************************************************
+    start = None
+    end = None
+
+    for city in cityMap:
+        if city.name == args.start:
+            city.setStart()
+            start = city
+            print city.name, "set as Start."
+        
+        if city.name == args.end:
+            city.setEnd()
+            end = city
+            print city.name, "set as End."
+
+    # Start and end city validation
+    if start == None:
+        print 'Invalid Start city...\tExiting.\n'
+        exit()
+    if end == None:
+        print 'Invalid End city...\tExiting.\n'
+        exit()
 
     #*********************************************************************
     # Full path or step-by-step
     #*********************************************************************
     if args.option == 0:
-        print 'Printing full path.\n'
+        print 'Printing full path.'
     else:
-        print 'Printing step-by-step. Press enter to move.\n'
+        print 'Printing step-by-step. Press enter to move.'
 
     #*********************************************************************
     # Heuristic choice from command line argument
     #*********************************************************************
     if args.heuristic == 0:
         print 'Using Straight-Line heuristic.\n\n'
-        func.Straight_Line2(start, end, cityMap, args.option)
+        func.SL_Heuristic(cityMap, start, end, args.option)
     else:
         print 'Using Fewest-Links heuristic.\n\n'
-        func.Fewest_Links(start, end, cityMap, args.option)
+        func.FL_Heuristic(cityMap, start, end, args.option)
+
+    

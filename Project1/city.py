@@ -30,6 +30,9 @@ class City():
     def __str__(self):
         return self.name
 
+    def setParent(self, p):
+        self.parent = p
+
     def setStart(self):
         self.start = True
     

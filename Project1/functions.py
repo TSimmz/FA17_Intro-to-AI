@@ -6,7 +6,9 @@
 import os
 import sys
 import math
+
 from city import City
+from queue import Queue
 from argparse import ArgumentParser
 
 #*********************************************************************
@@ -90,10 +92,11 @@ def FindMinimum(op):
 #*********************************************************************
 # Function to perform the straight-line heuristic
 #*********************************************************************
-def Straight_Line2(start, end, cityMap, opt):
+def SL_Heuristic(cityMap, start, end, opt):
     openedList = []     # List to be checked cities
     closedList = []     # List of already check cities
-    tempCity = start    # TemporaryCity for returnPath
+    tempCity = start    # Temporary City for returnPath
+    done = False
 
     f = dict()          # Dictionary for overall cost
     g = dict()          # Dictionary for calculated cost
@@ -102,9 +105,9 @@ def Straight_Line2(start, end, cityMap, opt):
     distance = 0        # Current distance
     returnPath = dict() # Dictionary for return path
 
-    openedList.append(start) # Add start city to openedList
-    f[start.name] = 0   # Initialize start cost to 0
-    g[start.name] = 0   # Initialize start cost to 0
+    openedList.append(start)    # Add start city to openedList
+    f[start.name] = 0           # Initialize start cost to 0
+    g[start.name] = 0           # Initialize start cost to 0
     h[start.name] = start.calculateDistance(end) # Estimate start to distance to goal
 
     # Loop while cities are in OpenedList
@@ -113,12 +116,17 @@ def Straight_Line2(start, end, cityMap, opt):
         q = FindMinimum(openedList)         # Find city in openedList with minimum overall cost
         returnPath[tempCity.name] = q.name  # Set current city's parent city
 
+        distance = distance + tempCity.calculateDistance(q) # Update distance
+
         if opt == 1:
             print 'Current Path:', closedList
-            print 'Distance Traveled:',  distance
+            print 'Distance Traveled: %.2f' % distance
             print 'Best move is to: ', q.name
-
-        #print 'Current city is', q.name,'\n'        
+            
+            if done == True:
+                closedList.append(q)
+                print '\nFinal Path:', closedList, '\n'
+                return
 
         # Remove q from the openedList
         for c in openedList:
@@ -130,17 +138,14 @@ def Straight_Line2(start, end, cityMap, opt):
 
             # Check to see if we've reached the end
             if n.name == end.name:
-                
-                if opt == 0:
-                    returnPath[n.name] = ''
-                    FinalPath(returnPath, start)
-                    
-                return         
+                done = True        
 
             # Calculate costs and heuristic estimate
             g[n.name] = g[q.name] + q.calculateDistance(n)
             h[n.name] = Estimate_Cost(n, end)
             f[n.name] = g.get(n.name) + h.get(n.name)
+
+            print n.name, 'cost is: ', g.get(n.name), "+", h.get(n.name), "=", f.get(n.name)
 
             # Set overall cost for city
             n.cost = f.get(n.name)
@@ -176,14 +181,60 @@ def Straight_Line2(start, end, cityMap, opt):
 #*********************************************************************
 # Returns the final path to the problem
 #*********************************************************************
-def FinalPath(returnPath, start):
+def FinalPath(state, returnPath):
     print 'Optimal Path:'
-    print returnPath.get(start.name), "->",
-    
-    
+    path = []
+
+    while True:
+        r = returnPath[state.name]
+        if len(r) == 1:
+            state == r[0]
+            path.append(state.name)
+        else:
+            break
+
+    print path.reverse()
+
+#*********************************************************************
+# Returns the city from the cityMap
+#*********************************************************************
+def FindCity(cityMap, find):
+    for city in cityMap:
+        if city.name == find.name:
+            return city
 
 #*********************************************************************
 # Function to perform the fewest links heuristic
 #*********************************************************************
-def Fewest_Links(start, end, cityMap, opt):
-    return None    
+def FL_Heuristic(cityMap, start, end, opt):
+    q = Queue()
+    q.enqueue(FindCity(cityMap, start))
+
+    visited = []
+
+    returnPath = dict()
+    returnPath[start.name] = (None)
+
+    while not q.isEmpty():
+        current = FindCity(cityMap, q.dequeue())
+        print 'Current:', current.name
+
+        if current.name == end.name:
+            print 'Path found!'
+            FinalPath(current, returnPath)
+
+        for n in current.connections:
+            if n.name in visited:
+                continue
+
+            qList = q.getList()
+
+            if n not in qList:
+                returnPath[n.name] = current.name
+                q.enqueue(n)
+        
+        print 'Queue:', qList
+        visited.append(n.name)
+        cont = raw_input()
+        if cont == '':
+            continue
