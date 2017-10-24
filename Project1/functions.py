@@ -101,7 +101,6 @@ def Straight_Line2(start, end, cityMap, opt):
 
     distance = 0        # Current distance
     returnPath = dict() # Dictionary for return path
-    returnPath[start.name] = '' # Initializing start key to empty string
 
     openedList.append(start) # Add start city to openedList
     f[start.name] = 0   # Initialize start cost to 0
@@ -112,7 +111,7 @@ def Straight_Line2(start, end, cityMap, opt):
     while openedList:
         
         q = FindMinimum(openedList)         # Find city in openedList with minimum overall cost
-        returnPath[q.name] = tempCity.name  # Set current city's parent city
+        returnPath[tempCity.name] = q.name  # Set current city's parent city
 
         if opt == 1:
             print 'Current Path:', closedList
@@ -133,8 +132,9 @@ def Straight_Line2(start, end, cityMap, opt):
             if n.name == end.name:
                 
                 if opt == 0:
-                    print 'Optimal Path:'
-
+                    returnPath[n.name] = ''
+                    FinalPath(returnPath, start)
+                    
                 return         
 
             # Calculate costs and heuristic estimate
@@ -142,6 +142,7 @@ def Straight_Line2(start, end, cityMap, opt):
             h[n.name] = Estimate_Cost(n, end)
             f[n.name] = g.get(n.name) + h.get(n.name)
 
+            # Set overall cost for city
             n.cost = f.get(n.name)
 
             # If neighbor is in openedList and new cost is less, update
@@ -165,7 +166,8 @@ def Straight_Line2(start, end, cityMap, opt):
         # Add current city to closedList
         closedList.append(q)
         tempCity = q
-                
+
+        # If step-by-step
         if opt == 1:
             cont = raw_input()
             if cont == '':
@@ -174,8 +176,11 @@ def Straight_Line2(start, end, cityMap, opt):
 #*********************************************************************
 # Returns the final path to the problem
 #*********************************************************************
-def FinalPath(prevPath, current):
-    return None
+def FinalPath(returnPath, start):
+    print 'Optimal Path:'
+    print returnPath.get(start.name), "->",
+    
+    
 
 #*********************************************************************
 # Function to perform the fewest links heuristic
