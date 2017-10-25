@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import sys
+import time
 import functions as func
 
 from city import City
@@ -23,6 +24,8 @@ args = parser.parse_args()
 #*******************************************************************************************************************************************************
 
 if __name__ == '__main__':
+    # Starts taking the time
+    s = time.time()
 
     # Get the data from the open files
     loc_f = args.locations.readlines()
@@ -88,5 +91,10 @@ if __name__ == '__main__':
     else:
         print 'Using Fewest-Links heuristic.\n\n'
         func.FL_Heuristic(cityMap, start, end, args.option)
+
+    # Takes finish time and prints total time
+    e = time.time()
+    total = e - s
+    print 'Total Time Elapsed: %.5f seconds' % total
 
     

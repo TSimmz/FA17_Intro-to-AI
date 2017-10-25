@@ -74,16 +74,15 @@ def RemoveCities(cityMap, ex):
 def Estimate_Cost(start, end):
     return math.floor(start.calculateDistance(end))
 
-
 #*********************************************************************
 # Finds the minimum cost in the openedList
 #*********************************************************************
 def FindMinimum(op):
     minCost = []
-    for city in op:     # Get list if costs in openedList
+    for city in op:     # Get list of costs in openedList
         minCost.append(city.cost)
     
-    for city in op:
+    for city in op:     # Gets city with minimum cost
         if min(minCost) == city.cost:
             q = city
 
@@ -123,10 +122,10 @@ def SL_Heuristic(cityMap, start, end, opt):
             print 'Distance Traveled: %.2f' % distance
             print 'Best move is to: ', q.name
             
-            if done == True:
-                closedList.append(q)
-                print '\nFinal Path:', closedList, '\n'
-                return
+        if done == True:
+            closedList.append(q)
+            print '\nFinal Path:', closedList, '\n'
+            return
 
         # Remove q from the openedList
         for c in openedList:
@@ -144,8 +143,6 @@ def SL_Heuristic(cityMap, start, end, opt):
             g[n.name] = g[q.name] + q.calculateDistance(n)
             h[n.name] = Estimate_Cost(n, end)
             f[n.name] = g.get(n.name) + h.get(n.name)
-
-            print n.name, 'cost is: ', g.get(n.name), "+", h.get(n.name), "=", f.get(n.name)
 
             # Set overall cost for city
             n.cost = f.get(n.name)
@@ -177,31 +174,55 @@ def SL_Heuristic(cityMap, start, end, opt):
             cont = raw_input()
             if cont == '':
                 continue
+    
+    print 'Path not found!'
+    return
 
 #*********************************************************************
 # Returns the final path to the problem
 #*********************************************************************
-def FinalPath(state, returnPath):
+def FinalPath(state, returnPath, cityMap):
     print 'Optimal Path:'
     path = []
+    path.append(state.name)
 
     while True:
-        r = returnPath[state.name]
-        if len(r) == 1:
-            state == r[0]
-            path.append(state.name)
-        else:
+        p = returnPath.get(state.name)
+        if CheckStartCity(cityMap, state) == True:
             break
+        else:
+            path.append(p)
+            state = FindCityByName(cityMap, p)
 
-    print path.reverse()
+    path.reverse()
+    d = len(path) - 1
+
+    print path
+    print 'Distance Traveled:', d
 
 #*********************************************************************
-# Returns the city from the cityMap
+# Returns the city from the cityMap from passed city
 #*********************************************************************
 def FindCity(cityMap, find):
     for city in cityMap:
         if city.name == find.name:
             return city
+
+#*********************************************************************
+# Returns the city from the cityMap from passed city name
+#*********************************************************************
+def FindCityByName(cityMap, find):
+    for city in cityMap:
+        if city.name == find:
+            return city
+
+#*********************************************************************
+# Checks to see if city is starting city
+#*********************************************************************
+def CheckStartCity(cityMap, find):
+    for city in cityMap:
+        if city.name == find.name and find.start == True:
+            return True
 
 #*********************************************************************
 # Function to perform the fewest links heuristic
@@ -217,13 +238,14 @@ def FL_Heuristic(cityMap, start, end, opt):
 
     while not q.isEmpty():
         current = FindCity(cityMap, q.dequeue())
-        print 'Current:', current.name
 
         if current.name == end.name:
-            print 'Path found!'
-            FinalPath(current, returnPath)
+                print 'Final ',
+                FinalPath(current, returnPath, cityMap)
+                return
 
         for n in current.connections:
+            
             if n.name in visited:
                 continue
 
@@ -232,9 +254,17 @@ def FL_Heuristic(cityMap, start, end, opt):
             if n not in qList:
                 returnPath[n.name] = current.name
                 q.enqueue(n)
-        
-        print 'Queue:', qList
+
+            if opt == 1:
+                FinalPath(n, returnPath, cityMap)
+                print '\n'
+
         visited.append(n.name)
-        cont = raw_input()
-        if cont == '':
-            continue
+
+        if opt == 1:
+            cont = raw_input()
+            if cont == '':
+                continue
+
+    print 'Path not found!'
+    return

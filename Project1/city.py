@@ -1,9 +1,11 @@
+#***************************************************************************
+#***************************************************************************
+# Class: City
+# Function: Stores information about each city
+#***************************************************************************
+#***************************************************************************
 import math
 
-#*****************************************************
-# City class to hold the coordinates of the city, the
-#   connections, and the distance btwn connections
-#*****************************************************
 class City():
     cityCount = 0
     
@@ -24,36 +26,46 @@ class City():
         class_name = self.__class__.__name__
         #print class_name, "destroyed."
 
+    # Used to represent object as string
     def __repr__(self):
         return str(self)
-        
+
+    # Similar to ToString() method
     def __str__(self):
         return self.name
 
+    # Sets the parent of city
     def setParent(self, p):
         self.parent = p
 
+    # Sets start member if city is start
     def setStart(self):
         self.start = True
     
+    # Sets end member if city is end
     def setEnd(self):
         self.end = True
 
+    # Sets cost if using straight-line
     def setCost(self, f):
         self.cost = f
 
+    # Adds a city to the list of connections
     def addConnection(self, conn):
         self.connections.append(conn)
 
+    # Calculates the distance between two cities
     def calculateDistance(self, city):
         return math.sqrt(pow(self.x-city.x, 2) + pow(self.y-city.y, 2))
 
+    # Gets the distances of each cities connected cities
     def getConnectionDists(self):
         for city in self.connections:
             dist = self.calculateDistance(city)
             self.connDist.append(dist)
     
+    # Returns count of cities
     def getCityCount(self):
-        return self.cityCount
+        return City.cityCount
 
     
